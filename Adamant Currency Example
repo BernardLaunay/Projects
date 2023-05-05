@@ -1,0 +1,101 @@
+public class CharacterStats 
+{
+    public int level;
+    public int experience;
+    public int gold;
+    public int adamant;
+
+    // Skills
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void GainExperience(int amount) 
+    {
+        experience += amount;
+        if (experience >= GetExperienceRequiredForLevelUp()) 
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp() 
+    {
+        level++;
+        experience = 0;
+        adamant++;
+        // Increase stats or give skill points here
+    }
+
+    private int GetExperienceRequiredForLevelUp() 
+    {
+        // Calculation for experience required for next level
+    }
+
+    public void AddGold(int amount) 
+    {
+        gold += amount;
+    }
+
+    public void RemoveGold(int amount) 
+    {
+        gold -= amount;
+    }
+
+    public void AddAdamant(int amount)
+    {
+        adamant += amount;
+    }
+
+    public void RemoveAdamant(int amount)
+    {
+        adamant -= amount;
+    }
+
+    // Skills
+    public void GainStrength(int amount) 
+    {
+        strength += amount;
+    }
+
+    public void GainDexterity(int amount) 
+    {
+        dexterity += amount;
+    }
+
+    public void GainIntelligence(int amount) 
+    {
+        intelligence += amount;
+    }
+}
+
+public class Battle 
+{
+    public Character player;
+    public Character opponent;
+
+    public void Start() 
+    {
+        // Randomly select an opponent
+        opponent = SelectOpponent();
+
+        // Perform battle calculations
+        bool playerWins = PerformBattle();
+
+        // Grant rewards
+        if (playerWins) 
+        {
+            player.AddExperience(opponent.level * 10);
+            player.AddGold(opponent.level * 5);
+            player.AddAdamant(1);
+        }
+    }
+
+    private Character SelectOpponent() 
+    {
+        // Randomly select an opponent from a list of available opponents
+    }
+
+    private bool PerformBattle() 
+    {
+        // Perform battle
