@@ -1,0 +1,89 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class CharacterStats 
+{
+    public int level;
+    public int experience;
+    public int koin;
+
+    // Skills
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void GainExperience(int amount) 
+    {
+        experience += amount;
+        if (experience >= GetExperienceRequiredForLevelUp()) 
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp() 
+    {
+        level++;
+        experience = 0;
+        // Increase stats or give skill points here
+    }
+
+    private int GetExperienceRequiredForLevelUp() 
+    {
+        // Calculation for experience required for next level
+    }
+
+    public void AddKoins(int amount) 
+    {
+        koin += amount;
+    }
+
+    public void RemoveKoins(int amount) 
+    {
+        koin -= amount;
+    }
+
+    // Skills
+    public void GainStrength(int amount) 
+    {
+        strength += amount;
+    }
+
+    public void GainDexterity(int amount) 
+    {
+        dexterity += amount;
+    }
+
+    public void GainIntelligence(int amount) 
+    {
+        intelligence += amount;
+    }
+}
+
+public class Quest 
+{
+    public string name;
+    public string description;
+    public int strengthReward;
+    public int dexterityReward;
+    public int intelligenceReward;
+    public int experienceReward;
+    public int koinReward;
+}
+
+public class QuestManager 
+{
+    public List<Quest> availableQuests;
+    public List<Quest> completedQuests;
+
+    public void StartQuest(Quest quest, CharacterStats characterStats) 
+    {
+        characterStats.GainStrength(quest.strengthReward);
+        characterStats.GainDexterity(quest.dexterityReward);
+        characterStats.GainIntelligence(quest.intelligenceReward);
+        characterStats.GainExperience(quest.experienceReward);
+        characterStats.AddKoins(quest.koinReward);
+        completedQuests.Add(quest);
+        availableQuests.Remove(quest);
+    }
+}
