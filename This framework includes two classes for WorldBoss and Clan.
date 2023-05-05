@@ -1,0 +1,55 @@
+using UnityEngine;
+using Mirror;
+using System.Collections.Generic;
+
+public class WorldBoss : NetworkBehaviour 
+{
+    public int health;
+    public List<Character> players;
+
+    [Server]
+    public void Attack(int damage) 
+    {
+        health -= damage;
+        if (health <= 0) 
+        {
+            // Code for world boss death
+        }
+    }
+
+    [Server]
+    public void AddPlayer(Character player) 
+    {
+        players.Add(player);
+    }
+
+    [Server]
+    public void RemovePlayer(Character player) 
+    {
+        players.Remove(player);
+    }
+}
+
+public class Clan : NetworkBehaviour 
+{
+    public string clanName;
+    public List<Character> members;
+
+    [Server]
+    public void Invite(Character player) 
+    {
+        // Code for clan invitation
+    }
+
+    [Server]
+    public void Join(Character player) 
+    {
+        // Code for joining a clan
+    }
+
+    [Server]
+    public void Leave(Character player) 
+    {
+        // Code for leaving a clan
+    }
+}
