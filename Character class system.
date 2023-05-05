@@ -1,0 +1,79 @@
+using UnityEngine;
+
+public class Character : MonoBehaviour 
+{
+    public string characterName;
+    public int level;
+    public int experience;
+    public int gold;
+
+    public void LevelUp() 
+    {
+        level++;
+    }
+
+    public void GainExperience(int experienceAmount) 
+    {
+        experience += experienceAmount;
+        if (experience >= level * 100) 
+        {
+            LevelUp();
+        }
+    }
+
+    public void GainGold(int goldAmount) 
+    {
+        gold += goldAmount;
+    }
+}
+
+public class Knight : Character 
+{
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void Attack() 
+    {
+        // Code for knight attack
+    }
+
+    public void Defend() 
+    {
+        // Code for knight defense
+    }
+}
+
+public class Archer : Character 
+{
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void Attack() 
+    {
+        // Code for archer attack
+    }
+
+    public void Defend() 
+    {
+        // Code for archer defense
+    }
+}
+
+public class Mage : Character 
+{
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void Attack() 
+    {
+        // Code for mage attack
+    }
+
+    public void Defend() 
+    {
+        // Code for mage defense
+    }
+}
