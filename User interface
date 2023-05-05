@@ -1,0 +1,91 @@
+public Text characterNameText;
+public Text levelText;
+public Text experienceText;
+public Text goldText;
+public Text strengthText;
+public Text dexterityText;
+public Text intelligenceText;
+public Text inventoryText;
+public Text questText;
+public Text clanText;
+public Text bossText;
+
+void Update() 
+{
+    // Update UI with player stats
+    characterNameText.text = playerCharacter.characterName;
+    levelText.text = "Level: " + playerCharacter.level;
+    experienceText.text = "Experience: " + playerCharacter.experience;
+    goldText.text = "Gold: " + playerInventory.gold;
+    strengthText.text = "Strength: " + playerCharacter.strength;
+    dexterityText.text = "Dexterity: " + playerCharacter.dexterity;
+    intelligenceText.text = "Intelligence: " + playerCharacter.intelligence;
+
+    // Update inventory UI
+    inventoryText.text = "Inventory:\n";
+    foreach (Item item in playerInventory.items) 
+    {
+        inventoryText.text += item.name + " (Level " + item.levelRequirement + ") - " + item.cost + " gold\n";
+    }
+
+    // Update quest UI
+    questText.text = "Quests:\n";
+    foreach (Quest quest in questManager.availableQuests) 
+    {
+        questText.text += quest.name + " - " + quest.description + "\n";
+    }
+
+    // Update clan UI
+    if (playerClan != null) 
+    {
+        clanText.text = "Clan: " + playerClan.clanName + "\n";
+        foreach (Character member in playerClan.members) 
+        {
+            clanText.text += "- " + member.characterName + "\n";
+        }
+    }
+
+    // Update world boss UI
+    bossText.text = "World Boss:\n";
+    if (worldBoss != null) 
+    {
+        bossText.text += "Health: " + worldBoss.health + "\n";
+    }
+    else 
+    {
+        bossText.text += "Not currently active";
+    }
+}
+
+public void AttackBoss() 
+{
+    if (worldBoss != null) 
+    {
+        worldBoss.Attack(playerCharacter.strength);
+    }
+}
+
+public void BuyItem(Item item) 
+{
+    marketplace.BuyItem(item, playerInventory, null);
+}
+
+public void SellItem(Item item) 
+{
+    marketplace.SellItem(item, playerInventory);
+}
+
+public void JoinClan() 
+{
+    // Code for joining a clan
+}
+
+public void LeaveClan() 
+{
+    // Code for leaving a clan
+}
+
+public void StartQuest(Quest quest) 
+{
+    questManager.StartQuest(quest, playerCharacter);
+}
