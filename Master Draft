@@ -1,0 +1,176 @@
+using UnityEngine;
+using Mirror;
+using System.Collections.Generic;
+
+public class Character : NetworkBehaviour 
+{
+    public string characterName;
+    public CharacterStats characterStats;
+    public Inventory playerInventory;
+    public Clan playerClan;
+
+    public override void OnStartClient() 
+    {
+        base.OnStartClient();
+        GameManager.instance.AddCharacter(this);
+    }
+
+    public override void OnStopClient() 
+    {
+        base.OnStopClient();
+        GameManager.instance.RemoveCharacter(this);
+    }
+
+    [ClientRpc]
+    public void RpcRespawn() 
+    {
+        if (isLocalPlayer) 
+        {
+            // Code for respawning the player
+        }
+    }
+
+    [Command]
+    public void CmdJoinClan(Clan clan) 
+    {
+        if (playerClan != null) 
+        {
+            playerClan.Leave(this);
+        }
+        playerClan = clan;
+        clan.Join(this);
+    }
+
+    [Command]
+    public void CmdLeaveClan() 
+    {
+        if (playerClan != null) 
+        {
+            playerClan.Leave(this);
+            playerClan = null;
+        }
+    }
+
+    [Command]
+    public void CmdStartQuest(Quest quest) 
+    {
+        GameManager.instance.questManager.StartQuest(quest, characterStats);
+    }
+
+    [Command]
+    public void CmdAttackBoss() 
+    {
+        GameManager.instance.worldBoss.Attack(characterStats.strength);
+    }
+
+    [Command]
+    public void CmdBuyItem(Item item) 
+    {
+        GameManager.instance.marketplace.BuyItem(item, playerInventory, characterStats);
+    }
+
+    [Command]
+    public void CmdSellItem(Item item) 
+    {
+        GameManager.instance.marketplace.SellItem(item, playerInventory);
+    }
+}
+
+public class GameManager : NetworkBehaviour 
+{
+    public static GameManager instance;
+
+    public List<Character> characters;
+    public QuestManager questManager;
+    public WorldBoss worldBoss;
+    public Marketplace marketplace;
+
+    private void Awake() 
+    {
+        instance = this;
+        questManager = new QuestManager();
+        worldBoss = new WorldBoss();
+        marketplace = new Marketplace();
+    }
+
+    public void AddCharacter(Character character) 
+    {
+        characters.Add(character);
+    }
+
+    public void RemoveCharacter(Character character) 
+    {
+        characters.Remove(character);
+    }
+}
+
+public class Marketplace 
+{
+    public void BuyItem(Item item, Inventory inventory, CharacterStats characterStats) 
+    {
+        if (characterStats != null) 
+        {
+            if (characterStats.koin >= item.cost) 
+            {
+                characterStats.RemoveKoins(item.cost);
+                inventory.AddItem(item);
+            }
+        }
+        else 
+        {
+            // Code for AI buying items
+        }
+    }
+
+    public void SellItem(Item item, Inventory inventory) 
+    {
+        inventory.RemoveItem(item);
+    }
+}
+
+public class Inventory 
+{
+    public int gold;
+    public List<Item> items;
+
+    public void AddItem(Item item) 
+    {
+        items.Add(item);
+    }
+
+    public void RemoveItem(Item item) 
+    {
+        items.Remove(item);
+    }
+}
+
+public class Item 
+{
+    public string name;
+    public int cost;
+    public int levelRequirement;
+}
+
+public class CharacterStats 
+{
+    public int level;
+    public int experience;
+    public int koin;
+
+    // Skills
+    public int strength;
+    public int dexterity;
+    public int intelligence;
+
+    public void GainExperience(int amount) 
+    {
+        experience += amount;
+        if (experience >= GetExperienceRequiredForLevelUp()) 
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp() 
+    {
+        level
