@@ -1,0 +1,47 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class Item 
+{
+    public string name;
+    public int cost;
+    public int levelRequirement;
+}
+
+public class Inventory 
+{
+    public List<Item> items;
+
+    public void AddItem(Item item) 
+    {
+        items.Add(item);
+    }
+
+    public void RemoveItem(Item item) 
+    {
+        items.Remove(item);
+    }
+}
+
+public class Marketplace 
+{
+    public Dictionary<Item, int> itemPrices;
+
+    public void BuyItem(Item item, Inventory buyerInventory, Inventory sellerInventory) 
+    {
+        int price = itemPrices[item];
+        if (buyerInventory.gold >= price) 
+        {
+            buyerInventory.gold -= price;
+            sellerInventory.gold += price;
+            sellerInventory.RemoveItem(item);
+            buyerInventory.AddItem(item);
+        }
+    }
+
+    public void SellItem(Item item, Inventory sellerInventory) 
+    {
+        sellerInventory.gold += item.cost;
+        sellerInventory.RemoveItem(item);
+    }
+}
